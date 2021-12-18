@@ -38,15 +38,49 @@ class Game
             end
         end
         #diagonal(down slope)
+        
+        diag_down_board = @board.map.with_index do |row, i|
+            new_row = row
+            i.times { new_row += [nil]} 
+            i.times { new_row.shift }
+            new_row
+        end
+        diag_down_board.reduce([0, 0, 0, 0, 0, 0, 0]) do |win_count, row|
+            row.each_with_index.reduce(win_count) do |win_count, (v, i)|
+                if row[i] == 'O'
+                    win_count[i] += 1
+                elsif row[i] == nil
+                    win_count[i] = 0
+                end
+                if win_count.any? { |column_count| column_count >= 4 ? true : false }
+                    return true
+                end
+                win_count
+            end
+        end
 
-        # diag_down_board = []
-        # diag_down_board = @board.reduce([]) do |new_board, row|
-        #     row = 
-        #     new_board[] << row
-            
-    
+        #diagonal(up slope)
+
+        diag_up_board = @board.map.with_index do |row, row_index|
+            new_row = row
+            (@board.length - 1 - row_index).times { new_row += [nil]} 
+            (@board.length - 1 - row_index).times { new_row.shift }
+            new_row
+        end
         
-        
+        diag_up_board.reduce([0, 0, 0, 0, 0, 0, 0]) do |win_count, row|
+            row.each_with_index.reduce(win_count) do |win_count, (v, i)|
+                if row[i] == 'O'
+                    win_count[i] += 1
+                elsif row[i] == nil
+                    win_count[i] = 0
+                end
+                if win_count.any? { |column_count| column_count >= 4 ? true : false }
+                    return true
+                end
+                win_count
+            end
+        end
         return false
     end
 end
