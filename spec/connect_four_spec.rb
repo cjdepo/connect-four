@@ -57,13 +57,46 @@ describe Game do
                 game.instance_variable_set(:@board, board)
                 expect(game.win?).to be true
             end
-            xit 'returns false when three in a row' do
+            it 'returns false when three in a row' do
+                o_row = [nil, nil, 'O', nil, nil, nil, nil]
+                empty_row = [nil, nil, nil, nil, nil, nil, nil]
+                board = []
+                board.push empty_row
+                3.times { board.push o_row }
+                board.push empty_row
+                game.instance_variable_set(:@board, board)
+                expect(game.win?).to be false
             end
-            xit 'returns false when two in a row, nil, and then three in a row' do
+            it 'returns false when two in a row, nil, and then three in a row' do
+                o_row = [nil, nil, nil, nil, nil, nil, 'O']
+                empty_row = [nil, nil, nil, nil, nil, nil, nil]
+                board = []
+                2.times {board.push o_row }
+                board.push empty_row
+                3.times {board.push o_row}
+                game.instance_variable_set(:@board, board)
+                expect(game.win?).to be false
             end
-            xit 'returns true when seven in a row' do
+            it 'returns true when six in a row' do
+                o_row = [nil, nil, nil, nil, nil, nil, 'O']
+                empty_row = [nil, nil, nil, nil, nil, nil, nil]
+                board = []
+                6.times { board.push o_row }
+                game.instance_variable_set(:@board, board)
+                expect(game.win?).to be true
             end
-            
+        end
+        context 'when winning by diagonal' do
+            xit 'returns true when four in a row' do
+                empty_row = [nil, nil, nil, nil, nil, nil, nil]
+                two_row = [nil, 'O', nil, nil, nil, nil, nil]
+                three_row = [nil, nil, 'O', nil, nil, nil, nil]
+                four_row = [nil, nil, nil, 'O', nil, nil, nil]
+                five_row = [nil, nil, nil, nil, 'O', nil, nil]
+                board = [empty_row, two_row, three_row, four_row, five_row, empty_row]
+                game.instance_variable_set(:@board, board)
+                expect(game.win?).to be true
+            end
         end
     end
 end
