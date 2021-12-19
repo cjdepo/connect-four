@@ -190,6 +190,21 @@ describe Game do
             expect(game.board[4][2]).to eq('O')
             expect(game.board[3][2]).to eq(nil)
         end
+
+        it 'fills entire column when played 6 times' do
+            6.times { game.play('O', 5) }
+            expect(game.board[5][4]).to eq('O')
+            expect(game.board[4][4]).to eq('O')
+            expect(game.board[3][4]).to eq('O')
+            expect(game.board[2][4]).to eq('O')
+            expect(game.board[1][4]).to eq('O')
+            expect(game.board[0][4]).to eq('O')
+        end
+        it 'returns column full message when column full' do
+            6.times { game.play('O', 5) }
+            expect(game).to receive(:puts).with("This column is filled!")
+            game.play('O', 5)
+        end
     end
 end
 

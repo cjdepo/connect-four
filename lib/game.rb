@@ -85,6 +85,10 @@ class Game
     end
     
     def play(token, column)
+        if @board[0][column-1] != nil
+            puts 'This column is filled!'
+            return @board
+        end
         new_board = []
         until @board.empty?
             bottom_row = @board[-1]
