@@ -1,11 +1,11 @@
-#/lib/main.rb
+# /lib/main.rb
 
 class Game
+    attr_reader :board
 
     def initialize
         row = [nil, nil, nil, nil, nil, nil, nil]
-        @board = []
-        6.times { @board.push row }
+        @board = Array.new(6).map{ Array.new(7) }
     end
 
     def win?
@@ -83,7 +83,24 @@ class Game
         end
         return false
     end
+    
+    def play(token, column)
+        new_board = []
+        until @board.empty?
+            bottom_row = @board[-1]
+            if bottom_row[column-1] == nil
+                row = @board.pop
+                row[column-1] = token
+                new_board.unshift(row)
+                until @board.empty?
+                    new_board.unshift(@board.pop)
+                end
+            elsif bottom_row[column-1]
+                new_board.unshift(@board.pop)
+            end
+        end
+        @board = new_board
+    end
+    
+    
 end
-
-game = Game.new
-p game.win?

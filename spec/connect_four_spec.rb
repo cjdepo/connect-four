@@ -169,7 +169,7 @@ describe Game do
                 three_row = [nil, nil, 'O', nil, nil, nil, nil]
                 four_row = [nil, nil, nil, 'O', nil, nil, nil]
                 five_row = [nil, nil, nil, nil, 'O', nil, nil]
-                six_row = [nil, nil, nil, nil, nil, '0', nil]
+                six_row = [nil, nil, nil, nil, nil, 'O', nil]
                 board = [six_row, five_row, four_row, three_row, two_row, one_row]
                 game.instance_variable_set(:@board, board)
                 expect(game.win?).to be true
@@ -177,6 +177,19 @@ describe Game do
         end
     end
     
-    describe
+    describe '#play' do
+        subject(:game) { described_class.new }
+        it 'adds to bottom row when empty board' do
+            new_board = game.play('O', 4)
+            expect(game.board[5][3]).to eq('O')
+            expect(game.board[4][3]).to eq(nil)
+        end
+        it 'adds to both bottom rows when two tokens added to empty board' do
+            2.times { game.play('O', 3) }
+            expect(game.board[5][2]).to eq('O')
+            expect(game.board[4][2]).to eq('O')
+            expect(game.board[3][2]).to eq(nil)
+        end
+    end
 end
 
