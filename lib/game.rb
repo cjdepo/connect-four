@@ -118,7 +118,7 @@ class Game
         @board.each{ |row| p row }
     end
 
-    def player_input(player)
+    def player_input
         puts "\n\nEnter a #(1-7) to choose where to place your chip:"
         display_board
         puts "\n"
@@ -140,7 +140,7 @@ class Game
             elsif player == @player2
                 player = @player1
             end
-            column = player_input(player)
+            column = player_input
             play(player.token, column)
         end
         if player == @player1 

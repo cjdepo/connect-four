@@ -220,6 +220,22 @@ describe Game do
             expect{ game.run_game }.to output(include(win_phrase)).to_stdout
         end
     end
+
+    describe '#player_input' do
+        subject(:game) { described_class.new }
+        it 'when player inputs 11 return error and gets' do
+            allow(game).to receive(:gets).and_return('11', '7')
+            expect {game.player_input}.to output(include("You must enter a number between 1 and 7")).to_stdout
+        end
+        it 'when player inputs 0 return error and gets' do
+            allow(game).to receive(:gets).and_return('0', '7')
+            expect {game.player_input}.to output(include("You must enter a number between 1 and 7")).to_stdout
+        end
+        it 'when player inputs 7 accept it' do
+            allow(game).to receive(:gets).and_return('7')
+            expect {game.player_input}.not_to output("You must enter a number between 1 and 7").to_stdout
+        end
+    end
 end
 
 
