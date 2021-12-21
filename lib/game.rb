@@ -1,23 +1,26 @@
 # /lib/main.rb
+require_relative 'player'
 
 class Game
-    attr_reader :board
+    attr_reader :board, :player1, :player2
 
     def initialize
         row = [nil, nil, nil, nil, nil, nil, nil]
         @board = Array.new(6).map{ Array.new(7) }
+        @player1 = Player.new(1, 'O')
+        @player2 = Player.new(2, 'X')
     end
 
-    def win?
-        @board.each do |row|
+    def win?(token)
+        @board.each_with_index do |row, i|
             row.reduce(0) do |count, value|
-                if value == 'O'
+                if value == token
                     count += 1
                     if count == 4
                         return true
                     end
                     count
-                elsif value == nil
+                else
                     count = 0
                 end
             end
@@ -26,7 +29,7 @@ class Game
         
         @board.reduce([0, 0, 0, 0, 0, 0, 0]) do |win_count, row|
             row.each_with_index.reduce(win_count) do |win_count, (v, i)|
-                if row[i] == 'O'
+                if row[i] == token
                     win_count[i] += 1
                 elsif row[i] == nil
                     win_count[i] = 0
@@ -47,7 +50,7 @@ class Game
         end
         diag_down_board.reduce([0, 0, 0, 0, 0, 0, 0]) do |win_count, row|
             row.each_with_index.reduce(win_count) do |win_count, (v, i)|
-                if row[i] == 'O'
+                if row[i] == token
                     win_count[i] += 1
                 elsif row[i] == nil
                     win_count[i] = 0
@@ -70,7 +73,7 @@ class Game
         
         diag_up_board.reduce([0, 0, 0, 0, 0, 0, 0]) do |win_count, row|
             row.each_with_index.reduce(win_count) do |win_count, (v, i)|
-                if row[i] == 'O'
+                if row[i] == token
                     win_count[i] += 1
                 elsif row[i] == nil
                     win_count[i] = 0
@@ -106,5 +109,49 @@ class Game
         @board = new_board
     end
     
-    
+    def clear_board
+        @board = Array.new(6).map{ Array.new(7) }
+    end
+
+    def display_board
+        p ['1', '2', '3', '4', '5', '6', '7']
+        @board.each{ |row| p row }
+    end
+
+    def player_input(player)
+        puts "\n\nEnter a #(1-7) to choose where to place your chip:"
+        display_board
+        puts "\n"
+        column = 0
+        until column.class == Integer && column <= 7 && column >= 1
+            column = gets.chomp.to_i
+            if column.class != Integer || column <= 1 || column >= 7
+                puts "You must enter a number between 1 and 7"
+            end
+        end
+        column
+    end
+
+    def run_game
+        player = @player2
+        until self.win?('O') || self.win?('X')
+            if player == @player1
+                player = @player2
+            elsif player == @player2
+                player = @player1
+            end
+            column = player_input(player)
+            play(player.token, column)
+        end
+        if player == @player1 
+            puts "\n\nPlayer 1 wins!!!\n\n"
+        elsif player == @player2
+            puts "\n\nPlayer 2 wins!!!\n\n"
+        end
+    end
+
+
+
 end
+
+
